@@ -14,7 +14,10 @@
 </head>
 <body>
     <div class="card">
+        <img src="img/banner.jpg" alt="Banner" style="width: 100%; border-radius: 5px; margin-bottom: 15px;">
+
         <h3>Calculadora de Vencimiento</h3>
+        
         <label>Fecha de Elaboración:</label>
         <input type="date" id="fechaElab">
         
@@ -23,8 +26,12 @@
         
         <button onclick="calcular()">Calcular Fecha</button>
         <div id="resultado"></div>
-    </div>
 
+        <div style="text-align: center; margin-top: 20px;">
+            <img src="https://cdn-icons-png.flaticon.com/512/2618/2618245.png" width="50" alt="Icono reloj">
+        </div>
+    </div>
+    ```
     <script>
         function calcular() {
             const fechaInput = document.getElementById('fechaElab').value;
