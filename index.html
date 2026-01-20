@@ -21,7 +21,6 @@
             box-shadow: 0 8px 24px rgba(0,0,0,0.1); 
             width: 350px; 
         }
-        /* Contenedor para las dos imágenes arriba */
         .header-logos {
             display: flex;
             justify-content: space-between;
@@ -29,7 +28,7 @@
             margin-bottom: 20px;
         }
         .header-logos img {
-            width: 45%; /* Ajusta el tamaño para que quepan ambas */
+            width: 45%; 
             height: auto;
             object-fit: contain;
         }
@@ -44,7 +43,7 @@
             font-size: 0.9rem; 
             color: #666; 
         }
-        input { 
+        input, select { 
             width: 100%; 
             margin-bottom: 15px; 
             padding: 10px; 
@@ -66,15 +65,24 @@
         button:hover { 
             background-color: #0056b3; 
         }
-        #resultado { 
+        #resultado, #resultadoRetiroContainer { 
             margin-top: 20px; 
             padding: 15px;
             border-radius: 6px;
             text-align: center;
             font-size: 1.1rem;
+        }
+        #resultado {
             background-color: #e7f3ff;
             color: #004a99;
-            display: none; /* Se muestra solo al calcular */
+            display: none;
+        }
+        #resultadoRetiroContainer {
+            background-color: #fff4e5;
+            color: #b35900;
+            display: none;
+            border-left: 4px solid #ff9800;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -90,37 +98,56 @@
         <label>Fecha de Elaboración:</label>
         <input type="date" id="fechaElab">
         
-        <label>Días de tolerancia:</label>
+        <label>Vida útil:</label>
         <input type="number" id="diasTolerancia" placeholder="Ej: 30" min="0">
+
+        <label>Norma de retiro :</label>
+        <select id="normaRetiro">
+            <option value="1">1 día</option>
+            <option value="3">3 días</option>
+        </select>
         
         <button onclick="calcular()">Calcular Vencimiento</button>
         
         <div id="resultado"></div>
+
+        <div id="resultadoRetiroContainer">
+            <small>Fecha de retiro sugerida:</small><br>
+            <strong id="fechaRetiro"></strong>
+        </div>
     </div>
 
     <script>
         function calcular() {
             const fechaInput = document.getElementById('fechaElab').value;
-            const dias = parseInt(document.getElementById('diasTolerancia').value);
+            const diasVenc = parseInt(document.getElementById('diasTolerancia').value);
+            const diasRetiroNorma = parseInt(document.getElementById('normaRetiro').value);
+            
             const divResultado = document.getElementById('resultado');
+            const divRetiroContainer = document.getElementById('resultadoRetiroContainer');
+            const spanRetiro = document.getElementById('fechaRetiro');
 
-            if (fechaInput && !isNaN(dias)) {
-                // Crear fecha a partir del input
-                let fecha = new Date(fechaInput);
-                
-                // Corregir desfase de zona horaria del input date
-                fecha.setMinutes(fecha.getMinutes() + fecha.getTimezoneOffset());
-                
-                // Sumar los días de tolerancia
-                fecha.setDate(fecha.getDate() + dias);
+            if (fechaInput && !isNaN(diasVenc)) {
+
+                let fechaVenc = new Date(fechaInput);
+                fechaVenc.setMinutes(fechaVenc.getMinutes() + fechaVenc.getTimezoneOffset());
+                fechaVenc.setDate(fechaVenc.getDate() + diasVenc);
                 
                 const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-                const fechaFormateada = fecha.toLocaleDateString('es-ES', opciones);
+                const fechaFormateada = fechaVenc.toLocaleDateString('es-ES', opciones);
                 
                 divResultado.style.display = "block";
                 divResultado.innerHTML = `<strong>Vence el:</strong><br>${fechaFormateada}`;
+
+              
+                let fechaRetiro = new Date(fechaVenc);
+                fechaRetiro.setDate(fechaRetiro.getDate() - diasRetiroNorma);
+                
+                spanRetiro.innerText = fechaRetiro.toLocaleDateString('es-ES', opciones);
+                divRetiroContainer.style.display = "block";
+
             } else {
-                alert("Por favor, ingresa una fecha válida y los días de tolerancia.");
+                alert("Por favor, ingresa una fecha válida y la vida útil del producto.");
             }
         }
     </script>
