@@ -3,35 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Vencimiento</title>
+    <title>Calculadora de Vencimiento | Copec & Arcoprime</title>
     <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; padding: 50px; background-color: #f4f4f9; }
-        .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 300px; }
-        input { width: 100%; margin: 10px 0; padding: 8px; box-sizing: border-box; }
-        button { width: 100%; padding: 10px; background-color: #0070f3; color: white; border: none; border-radius: 5px; cursor: pointer; }
-        #resultado { margin-top: 20px; font-weight: bold; color: #333; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5; 
+        }
+        .card { 
+            background: white; 
+            padding: 2rem; 
+            border-radius: 12px; 
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1); 
+            width: 350px; 
+        }
+        /* Contenedor para las dos imágenes arriba */
+        .header-logos {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .header-logos img {
+            width: 45%; /* Ajusta el tamaño para que quepan ambas */
+            height: auto;
+            object-fit: contain;
+        }
+        h3 { 
+            text-align: center; 
+            color: #1a1a1a; 
+            margin-bottom: 20px;
+        }
+        label { 
+            display: block; 
+            margin-bottom: 5px; 
+            font-size: 0.9rem; 
+            color: #666; 
+        }
+        input { 
+            width: 100%; 
+            margin-bottom: 15px; 
+            padding: 10px; 
+            border: 1px solid #ddd; 
+            border-radius: 6px; 
+            box-sizing: border-box; 
+        }
+        button { 
+            width: 100%; 
+            padding: 12px; 
+            background-color: #0070f3; 
+            color: white; 
+            border: none; 
+            border-radius: 6px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: background 0.3s;
+        }
+        button:hover { 
+            background-color: #0056b3; 
+        }
+        #resultado { 
+            margin-top: 20px; 
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 1.1rem;
+            background-color: #e7f3ff;
+            color: #004a99;
+            display: none; /* Se muestra solo al calcular */
+        }
     </style>
 </head>
 <body>
     <div class="card">
-        <img src="img/banner.jpg" alt="Banner" style="width: 100%; border-radius: 5px; margin-bottom: 15px;">
+        <div class="header-logos">
+            <img src="copec.jpg" alt="Copec">
+            <img src="arcoprime.jpg" alt="Arcoprime">
+        </div>
 
-        <h3>Calculadora de Vencimiento</h3>
+        <h3>Control de Vencimiento</h3>
         
         <label>Fecha de Elaboración:</label>
         <input type="date" id="fechaElab">
         
         <label>Días de tolerancia:</label>
-        <input type="number" id="diasTolerancia" placeholder="Ej: 30">
+        <input type="number" id="diasTolerancia" placeholder="Ej: 30" min="0">
         
-        <button onclick="calcular()">Calcular Fecha</button>
+        <button onclick="calcular()">Calcular Vencimiento</button>
+        
         <div id="resultado"></div>
-
-        <div style="text-align: center; margin-top: 20px;">
-            <img src="https://cdn-icons-png.flaticon.com/512/2618/2618245.png" width="50" alt="Icono reloj">
-        </div>
     </div>
-    ```
+
     <script>
         function calcular() {
             const fechaInput = document.getElementById('fechaElab').value;
@@ -39,14 +105,22 @@
             const divResultado = document.getElementById('resultado');
 
             if (fechaInput && !isNaN(dias)) {
+                // Crear fecha a partir del input
                 let fecha = new Date(fechaInput);
-                // Sumamos los días (JavaScript maneja automáticamente el cambio de mes/año)
-                fecha.setDate(fecha.getDate() + dias + 1); 
                 
-                const opciones = { year: 'numeric', month: 'long', day: 'numeric' };
-                divResultado.innerText = "Vence el: " + fecha.toLocaleDateString('es-ES', opciones);
+                // Corregir desfase de zona horaria del input date
+                fecha.setMinutes(fecha.getMinutes() + fecha.getTimezoneOffset());
+                
+                // Sumar los días de tolerancia
+                fecha.setDate(fecha.getDate() + dias);
+                
+                const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                const fechaFormateada = fecha.toLocaleDateString('es-ES', opciones);
+                
+                divResultado.style.display = "block";
+                divResultado.innerHTML = `<strong>Vence el:</strong><br>${fechaFormateada}`;
             } else {
-                divResultado.innerText = "Por favor, completa ambos campos.";
+                alert("Por favor, ingresa una fecha válida y los días de tolerancia.");
             }
         }
     </script>
