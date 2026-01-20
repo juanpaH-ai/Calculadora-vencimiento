@@ -52,14 +52,13 @@
             box-sizing: border-box; 
         }
 
-        /* AJUSTE DE IMAGEN AL FORMATO DEL FORMULARIO */
         .img-ajustada {
-            width: 100%; /* Ocupa todo el ancho del formulario */
-            height: auto; /* Mantiene la proporción */
-            border-radius: 8px; /* Bordes redondeados como los inputs */
+            width: 100%; 
+            height: auto; /
+            border-radius: 8px; 
             margin-bottom: 15px;
             display: block;
-            border: 1px solid #eee; /* Borde sutil para que no flote */
+            border: 1px solid #eee; 
         }
 
         button { 
@@ -89,10 +88,10 @@
             display: none;
         }
         #resultadoRetiroContainer {
-            background-color: #fff4e5;
-            color: #b35900;
+            background-color: #e61a1a;
+            color: #f6f6f6;
             display: none;
-            border-left: 4px solid #ff9800;
+            border-left: 4px solid #e61a1a;
             margin-top: 10px;
         }
     </style>
@@ -109,10 +108,10 @@
         <label>Fecha de Elaboración:</label>
         <input type="date" id="fechaElab">
         
-        <label>Días de vida útil (tolerancia):</label>
+        <label>Días de vida útil:</label>
         <input type="number" id="diasVidaUtil" placeholder="Ej: 30" min="0">
 
-        <label>Norma de retiro (días antes):</label>
+        <label>Norma de retiro:</label>
         <select id="normaRetiro">
             <option value="1">1 día</option>
             <option value="3">3 días</option>
@@ -125,7 +124,7 @@
         <div id="resultado"></div>
 
         <div id="resultadoRetiroContainer">
-            <small>Fecha de retiro sugerida:</small><br>
+            <small>Fecha de retiro:</small><br>
             <strong id="fechaRetiro"></strong>
         </div>
     </div>
