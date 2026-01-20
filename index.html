@@ -51,6 +51,17 @@
             border-radius: 6px; 
             box-sizing: border-box; 
         }
+
+        /* AJUSTE DE IMAGEN AL FORMATO DEL FORMULARIO */
+        .img-ajustada {
+            width: 100%; /* Ocupa todo el ancho del formulario */
+            height: auto; /* Mantiene la proporción */
+            border-radius: 8px; /* Bordes redondeados como los inputs */
+            margin-bottom: 15px;
+            display: block;
+            border: 1px solid #eee; /* Borde sutil para que no flote */
+        }
+
         button { 
             width: 100%; 
             padding: 12px; 
@@ -78,10 +89,10 @@
             display: none;
         }
         #resultadoRetiroContainer {
-            background-color: #e61a1a;
-            color: #f6f6f6;
+            background-color: #fff4e5;
+            color: #b35900;
             display: none;
-            border-left: 4px solid #e61a1a;
+            border-left: 4px solid #ff9800;
             margin-top: 10px;
         }
     </style>
@@ -98,23 +109,23 @@
         <label>Fecha de Elaboración:</label>
         <input type="date" id="fechaElab">
         
-        <label>Vida útil:</label>
-        <input type="number" id="diasTolerancia" placeholder="Ej: 30" min="0">
+        <label>Días de vida útil (tolerancia):</label>
+        <input type="number" id="diasVidaUtil" placeholder="Ej: 30" min="0">
 
-        <label>Norma de retiro :</label>
+        <label>Norma de retiro (días antes):</label>
         <select id="normaRetiro">
             <option value="1">1 día</option>
             <option value="3">3 días</option>
         </select>
-        
-       <img src="img/NormaRetiro.jpeg" alt="Referencia" class="imagen-fija">
+
+            <img src="img/NormaRetiro.jpeg" alt="Referencia" class="img-ajustada">
         
         <button onclick="calcular()">Calcular Vencimiento</button>
         
         <div id="resultado"></div>
 
         <div id="resultadoRetiroContainer">
-            <small>Fecha de retiro:</small><br>
+            <small>Fecha de retiro sugerida:</small><br>
             <strong id="fechaRetiro"></strong>
         </div>
     </div>
@@ -122,7 +133,7 @@
     <script>
         function calcular() {
             const fechaInput = document.getElementById('fechaElab').value;
-            const diasVenc = parseInt(document.getElementById('diasTolerancia').value);
+            const diasVenc = parseInt(document.getElementById('diasVidaUtil').value);
             const diasRetiroNorma = parseInt(document.getElementById('normaRetiro').value);
             
             const divResultado = document.getElementById('resultado');
@@ -130,7 +141,7 @@
             const spanRetiro = document.getElementById('fechaRetiro');
 
             if (fechaInput && !isNaN(diasVenc)) {
-
+                // Cálculo de Vencimiento
                 let fechaVenc = new Date(fechaInput);
                 fechaVenc.setMinutes(fechaVenc.getMinutes() + fechaVenc.getTimezoneOffset());
                 fechaVenc.setDate(fechaVenc.getDate() + diasVenc);
@@ -141,7 +152,7 @@
                 divResultado.style.display = "block";
                 divResultado.innerHTML = `<strong>Vence el:</strong><br>${fechaFormateada}`;
 
-              
+                // Cálculo de Retiro (Vencimiento - Norma)
                 let fechaRetiro = new Date(fechaVenc);
                 fechaRetiro.setDate(fechaRetiro.getDate() - diasRetiroNorma);
                 
@@ -149,7 +160,7 @@
                 divRetiroContainer.style.display = "block";
 
             } else {
-                alert("Por favor, ingresa una fecha válida y la vida útil del producto.");
+                alert("Por favor, ingresa una fecha válida y los días de vida útil.");
             }
         }
     </script>
