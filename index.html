@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Vencimiento | Copec & Arcoprime</title>
+    <title>Calculadora Vencimiento y Recepción | Pronto</title>
     <style>
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            background-color: #f0f2f5; 
-        }
-        .card { 
-            background: white; 
-            padding: 2rem; 
-            border-radius: 12px; 
-            box-shadow: 0 8px 24px rgba(0,0,0,0.1); 
-            width: 350px; 
+        body {
+        font-family: 'Segoe UI', sans-serif; 
+        display: flex;
+        justify-content: center;
+        padding: 20px;
+        margin: 0;
+        background-color: #f0f2f5;
+       }
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
         }
         .header-logos {
             display: flex;
@@ -28,137 +28,192 @@
             margin-bottom: 20px;
         }
         .header-logos img {
-            width: 45%; 
+            width: 45%;
             height: auto;
             object-fit: contain;
         }
         h3 { 
-            text-align: center; 
-            color: #1a1a1a; 
-            margin-bottom: 20px;
-        }
-        label { 
-            display: block; 
-            margin-bottom: 5px; 
-            font-size: 0.9rem; 
-            color: #666; 
-        }
-        input, select { 
-            width: 100%; 
-            margin-bottom: 15px; 
-            padding: 10px; 
-            border: 1px solid #ddd; 
-            border-radius: 6px; 
-            box-sizing: border-box; 
-        }
-
-        .img-ajustada {
-            width: 100%; 
-            height: auto; /
-            border-radius: 8px; 
-            margin-bottom: 15px;
-            display: block;
-            border: 1px solid #eee; 
-        }
-
-        button { 
-            width: 100%; 
-            padding: 12px; 
-            background-color: #0070f3; 
-            color: white; 
-            border: none; 
-            border-radius: 6px; 
-            font-weight: bold; 
-            cursor: pointer; 
-            transition: background 0.3s;
-        }
-        button:hover { 
-            background-color: #0056b3; 
-        }
-        #resultado, #resultadoRetiroContainer { 
-            margin-top: 20px; 
-            padding: 15px;
-            border-radius: 6px;
             text-align: center;
-            font-size: 1.1rem;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
         }
-        #resultado {
-            background-color: #e7f3ff;
-            color: #004a99;
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+            color: #666;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            margin-bottom: 12px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: #ed1c24;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .res-box {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
             display: none;
+            border: 1px solid;
         }
-        #resultadoRetiroContainer {
+        
+        #recepcionBox {
+        background-color: #fff9c4;
+        color: #827717;
+        border-color: #fbc02d;
+        }
+        
+        #vencimientoBox{
+        background-color: #e7f3ff;
+        color: #004a99;
+        border-color: #bbdefb;
+        }
+        
+        #retiroBox {
             background-color: #e61a1a;
             color: #f6f6f6;
-            display: none;
-            border-left: 6px solid #e61a1a;
-            margin-top: 10px;
+            border-color: #FFFFFF;
         }
+            
+        .status {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 6px;
+            display: none; text-align: center;
+        }
+        small {
+            font-size: 0.8rem;
+            font-weight: normal;
+            text-transform: uppercase;
+        }
+        
     </style>
 </head>
 <body>
     <div class="card">
         <div class="header-logos">
             <img src="img/copec.jpg" alt="Copec">
-            <img src="img/Calidad1.jpeg" alt="Arcoprime">
+            <img src="img/arcoprime.jpg" alt="Arcoprime">
         </div>
 
-        <h3>Calcula la Fecha de Vencimiento Y Norma de Retiro</h3>
+        <h3>Control de Recepción Pronto</h3>
+
+        <div id="statusBanner" class="status"></div>
+
+        <label>Tipo de Producto:</label>
+        <select id="tipoProducto">
+            <option value="0.5">General (Mínimo 50%)</option>
+            <option value="0.5">Congelados (Mínimo 50%)</option>
+            <option value="0.4">Lácteos (Mínimo 40%)</option>
+        </select>
         
         <label>Fecha de Elaboración:</label>
         <input type="date" id="fechaElab">
         
-        <label>Días de vida útil:</label>
-        <input type="number" id="diasVidaUtil" placeholder="Ej: 30" min="0">
+        <label>Días de vida útil total:</label>
+        <input type="number" id="diasVida" placeholder="Ej: 30">
 
-        <label>Norma de retiro:</label>
-        <select id="normaRetiro">
-            <option value="1">1 día</option>
-            <option value="3">3 días</option>
+        <label>Norma de retiro (Días antes):</label>
+        <select id="norma">
+            <option value="1">1 día antes</option>
+            <option value="3">3 días antes</option>
         </select>
-
-            <img src="img/NormaRetiro1.jpeg" alt="Referencia" class="img-ajustada">
         
-        <button onclick="calcular()">Calcular Vencimiento</button>
+        <button onclick="procesar()">Verificar Producto</button>
         
-        <div id="resultado"></div>
+        <div id="recepcionBox" class="res-box">
+            <small>Fecha límite de recepción:</small><br>
+            <strong id="fechaMaxRec"></strong>
+        </div>
 
-        <div id="resultadoRetiroContainer">
-            <small>Fecha de retiro:</small><br>
+        <div id="vencimientoBox" class="res-box">
+            <small>Fecha de vencimiento:</small><br>
+            <strong id="fechaVenc"></strong>
+        </div>
+
+        <div id="retiroBox" class="res-box">
+            <small>Fecha de retiro de sala:</small><br>
             <strong id="fechaRetiro"></strong>
         </div>
     </div>
 
     <script>
-        function calcular() {
-            const fechaInput = document.getElementById('fechaElab').value;
-            const diasVenc = parseInt(document.getElementById('diasVidaUtil').value);
-            const diasRetiroNorma = parseInt(document.getElementById('normaRetiro').value);
+        function procesar() {
+            const fElabRaw = document.getElementById('fechaElab').value;
+            const vidaTotal = parseInt(document.getElementById('diasVida').value);
+            const porcMinimo = parseFloat(document.getElementById('tipoProducto').value);
+            const diasRetiro = parseInt(document.getElementById('norma').value);
+            const hoy = new Date();
+            hoy.setHours(0,0,0,0);
+
+            if (!fElabRaw || isNaN(vidaTotal)) {
+                alert("Completa la fecha de elaboración y los días de vida útil.");
+                return;
+            }
+
+            const opciones = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+            let elab = new Date(fElabRaw);
+            elab.setMinutes(elab.getMinutes() + elab.getTimezoneOffset());
+
+            // 1. CÁLCULO DE VENCIMIENTO
+            let venc = new Date(elab);
+            venc.setDate(elab.getDate() + vidaTotal);
+
+            // 2. CÁLCULO LÍMITE RECEPCIÓN (Basado en tu imagen)
+            // Regla del tope de 180 días (6 meses)
+            let diasParaRecepcion = Math.floor(vidaTotal * (1 - porcMinimo)); 
             
-            const divResultado = document.getElementById('resultado');
-            const divRetiroContainer = document.getElementById('resultadoRetiroContainer');
-            const spanRetiro = document.getElementById('fechaRetiro');
+            // Si el tiempo restante permitido es mayor a 180 días, se usa el tope de 180 días
+            if (diasParaRecepcion > 180) {
+                diasParaRecepcion = 180;
+            }
 
-            if (fechaInput && !isNaN(diasVenc)) {
-                let fechaVenc = new Date(fechaInput);
-                fechaVenc.setMinutes(fechaVenc.getMinutes() + fechaVenc.getTimezoneOffset());
-                fechaVenc.setDate(fechaVenc.getDate() + diasVenc);
-                
-                const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-                const fechaFormateada = fechaVenc.toLocaleDateString('es-ES', opciones);
-                
-                divResultado.style.display = "block";
-                divResultado.innerHTML = `<strong>Vence el:</strong><br>${fechaFormateada}`;
+            let limiteRec = new Date(venc);
+            limiteRec.setDate(venc.getDate() - diasParaRecepcion);
 
-       
-                let fechaRetiro = new Date(fechaVenc);
-                fechaRetiro.setDate(fechaRetiro.getDate() - diasRetiroNorma);
-                
-                spanRetiro.innerText = fechaRetiro.toLocaleDateString('es-ES', opciones);
-                divRetiroContainer.style.display = "block";
+            // 3. CÁLCULO DE RETIRO
+            let retiro = new Date(venc);
+            retiro.setDate(venc.getDate() - diasRetiro);
 
+            // MOSTRAR RESULTADOS
+            document.getElementById('vencimientoBox').style.display = "block";
+            document.getElementById('fechaVenc').innerText = venc.toLocaleDateString('es-ES', opciones);
+
+            document.getElementById('recepcionBox').style.display = "block";
+            document.getElementById('fechaMaxRec').innerText = limiteRec.toLocaleDateString('es-ES', opciones);
+
+            document.getElementById('retiroBox').style.display = "block";
+            document.getElementById('fechaRetiro').innerText = retiro.toLocaleDateString('es-ES', opciones);
+
+            // BANNER DE ESTADO (Compara con HOY)
+            const banner = document.getElementById('statusBanner');
+            banner.style.display = "block";
+            if (hoy <= limiteRec) {
+                banner.innerText = "✅ APTO PARA RECEPCIÓN";
+                banner.style.backgroundColor = "#d4edda";
+                banner.style.color = "#155724";
             } else {
-                alert("Por favor, ingresa una fecha válida y los días de vida útil.");
+                banner.innerText = "❌ NO RECIBIR: FUERA DE PLAZO";
+                banner.style.backgroundColor = "#f8d7da";
+                banner.style.color = "#721c24";
             }
         }
     </script>
