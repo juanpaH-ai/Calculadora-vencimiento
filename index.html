@@ -173,15 +173,12 @@
             let elab = new Date(fElabRaw);
             elab.setMinutes(elab.getMinutes() + elab.getTimezoneOffset());
 
-            // 1. CÁLCULO DE VENCIMIENTO
             let venc = new Date(elab);
             venc.setDate(elab.getDate() + vidaTotal);
 
-            // 2. CÁLCULO LÍMITE RECEPCIÓN (Basado en tu imagen)
-            // Regla del tope de 180 días (6 meses)
+
             let diasParaRecepcion = Math.floor(vidaTotal * (1 - porcMinimo)); 
             
-            // Si el tiempo restante permitido es mayor a 180 días, se usa el tope de 180 días
             if (diasParaRecepcion > 180) {
                 diasParaRecepcion = 180;
             }
@@ -189,11 +186,9 @@
             let limiteRec = new Date(venc);
             limiteRec.setDate(venc.getDate() - diasParaRecepcion);
 
-            // 3. CÁLCULO DE RETIRO
             let retiro = new Date(venc);
             retiro.setDate(venc.getDate() - diasRetiro);
 
-            // MOSTRAR RESULTADOS
             document.getElementById('vencimientoBox').style.display = "block";
             document.getElementById('fechaVenc').innerText = venc.toLocaleDateString('es-ES', opciones);
 
@@ -203,7 +198,6 @@
             document.getElementById('retiroBox').style.display = "block";
             document.getElementById('fechaRetiro').innerText = retiro.toLocaleDateString('es-ES', opciones);
 
-            // BANNER DE ESTADO (Compara con HOY)
             const banner = document.getElementById('statusBanner');
             banner.style.display = "block";
             if (hoy <= limiteRec) {
